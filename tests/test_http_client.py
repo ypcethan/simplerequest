@@ -32,3 +32,12 @@ def test_post_json(url, params, data, expected_args, expected_data):
     response = post_json(url, params, data)
     assert response['args'] == expected_args
     assert json.loads(response['data']) == expected_data
+
+
+@pytest.mark.parametrize('url,error_code', [
+    ('https://httpbin.org/status/400',  400),
+])
+def test_get_json_error(url,  error_code):
+    with pytest.raises(Exception) as e:
+        response = get_json(url)
+    assert e.value.message == f'HTTP Status Code: {error_code}'

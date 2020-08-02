@@ -1,6 +1,7 @@
 import http.client
 import json
 from simplehttp.utils import process_url
+import simplehttp
 from urllib.parse import urlencode
 
 
@@ -9,6 +10,10 @@ def get_json(url, params={}):
     conn = http.client.HTTPSConnection(url_parts['host'])
     conn.request('GET', url_parts['path'])
     response = conn.getresponse()
+    status = str(response.status)
+    print(status)
+    if not status.startswith('2'):
+        raise simplehttp.HttpError(f"HTTP Status Code: {status}")
     body = response.read()
     return json.loads(body)
 
