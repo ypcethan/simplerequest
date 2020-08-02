@@ -1,6 +1,19 @@
 from urllib.parse import urlparse, urlencode
 
 
+def process_url(url, params={}):
+    url_parts = get_url_parts(url)
+    host = url_parts['host']
+    query = url_parts['query']
+    resources_path = url_parts['path']
+    if len(query) > 0:
+        resources_path += "?" + query
+    if len(params) > 0:
+        resources_path = merge_path_with_params(resources_path, params)
+
+    return {'host': host, 'path': resources_path}
+
+
 def get_url_parts(url):
     parsed_url = urlparse(url)
 
