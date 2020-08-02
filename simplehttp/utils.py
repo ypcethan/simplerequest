@@ -2,6 +2,23 @@ from urllib.parse import urlparse, urlencode
 
 
 def process_url(url, params={}):
+    """Extract host name and resources path
+
+    Args:
+        url (string): Full url.  
+        params (dict, optional): Addtional query paramters. Defaults to {}.
+
+    Returns:
+        [dict]: {host,path} 
+            host: host name
+            path: resource path, constructed by appending orginal resource path given parameters.
+     Examples:
+        >>> merge_path_with_params('/get', {'debug': "true"})
+        "/get?debug=true"
+
+        >>> merge_path_with_params('/get?debug=true', {'limit': "20"})
+        "/get?debug=true&limit=20"
+    """
     url_parts = get_url_parts(url)
     host = url_parts['host']
     query = url_parts['query']
@@ -15,6 +32,7 @@ def process_url(url, params={}):
 
 
 def get_url_parts(url):
+
     parsed_url = urlparse(url)
 
     return {'host': parsed_url.hostname, 'path': parsed_url.path,
@@ -22,6 +40,21 @@ def get_url_parts(url):
 
 
 def merge_path_with_params(path_string, params):
+    """Appending path string with query parameters
+
+    Args:
+        path_string (str): resource path 
+        params (dict): query parameters 
+
+    Returns:
+        [string]: updated resource path.  
+    Examples:
+        >>> merge_path_with_params('/get', {'debug': "true"})
+        "/get?debug=true"
+
+        >>> merge_path_with_params('/get?debug=true', {'limit': "20"})
+        "/get?debug=true&limit=20"
+    """
     if len(params) == 0:
         return path_string
     process_params = join_params(params)

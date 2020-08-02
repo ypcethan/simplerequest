@@ -1,3 +1,3 @@
 import simplehttp
 
-print(simplehttp.get_json('sdf'))
+print(simplehttp.get_json('https://httpbin.org/get'))

@@ -1,13 +1,12 @@
 import http.client
-from simplehttp.utils import merge_path_with_params, get_url_parts
+import json
+from simplehttp.utils import process_url
 
 
 def get_json(url, params={}):
-    url_parts = get_url_parts(url)
-    host = url_parts['host']
-    query = url_parts['query']
-    resources_path = url_parts['path']
-    if len(query) > 0:
-        resources_path += "?" + query
-    if len(params) > 0:
-        resources_path = merge_path_with_params(resources_path, params)
+    url_parts = process_url(url, params)
+    conn = http.client.HTTPSConnection(url_parts['host'])
+    conn.request('GET', url_parts['path'])
+    response = conn.getresponse()
+    body = response.read()
+    return json.loads(body)
