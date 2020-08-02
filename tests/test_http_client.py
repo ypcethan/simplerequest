@@ -1,5 +1,6 @@
+import json
 import pytest
-from simplehttp import get_json
+from simplehttp import get_json, post_json
 
 
 @pytest.mark.parametrize('url,params,expected_result', [
@@ -11,3 +12,23 @@ from simplehttp import get_json
 def test_get_json(url, params, expected_result):
     response = get_json(url, params)
     assert response['args'] == expected_result
+
+
+@pytest.mark.parametrize('url,params,data,expected_args, expected_data', [
+    ('https://httpbin.org/post', {}, {}, {}, {}),
+    ('https://httpbin.org/post?debug=true', {}, {}, {'debug': 'true'}, {}),
+    ('https://httpbin.org/post?debug=true', {}, {
+        "isbn": "9789863479116", "title": u"流暢的 Python"
+    }, {'debug': 'true'}, {
+        "isbn": "9789863479116", "title": u"流暢的 Python"
+    }),
+    ('https://httpbin.org/post?debug=true', {}, {
+        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
+    }, {'debug': 'true'}, {
+        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
+    }),
+])
+def test_post_json(url, params, data, expected_args, expected_data):
+    response = post_json(url, params, data)
+    assert response['args'] == expected_args
+    assert json.loads(response['data']) == expected_data
