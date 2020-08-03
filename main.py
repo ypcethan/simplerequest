@@ -18,4 +18,4 @@ import simplehttp
 r2 = simplehttp.get_json("https://httpbin.org/get?debug=true",
                          params={"name": "常⾒見見問題 Q&A"})
 print(r2)
-print(json.loads(r2))
+# print(json.loads(r2))
