@@ -12,7 +12,7 @@ def get_json(url, params={}):
     response = conn.getresponse()
     status = str(response.status)
     if not status.startswith('2'):
-        raise simplehttp.HttpError(f"HTTP Status Code: {status}")
+        raise simplehttp.HttpError(f"HTTP Status Code: {status}", status)
     body = response.read()
     return json.loads(body)
 
@@ -26,6 +26,6 @@ def post_json(url, params={}, data={}):
     response = conn.getresponse()
     status = str(response.status)
     if not status.startswith('2'):
-        raise simplehttp.HttpError(f"HTTP Status Code: {status}")
+        raise simplehttp.HttpError(f"HTTP Status Code: {status}", status)
     body = response.read()
     return json.loads(body)

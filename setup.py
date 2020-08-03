@@ -4,7 +4,7 @@ with open("README.md", 'r') as fid:
     README = fid.read()
 
 setup(
-    name="simplehttp",
+    name="ethanypc-simplerequest",
     version="1.0.0",
     description="Wrapper around HTTP client",
     long_description=README,
