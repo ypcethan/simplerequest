@@ -2,7 +2,7 @@ import sys
 import http.client
 import json
 from simplehttp.utils import process_url
-import simplehttp
+from simplehttp.error import HttpError
 from urllib.parse import urlencode
 
 
@@ -18,7 +18,7 @@ def make_request(method, url, params={}, data={}):
     response = conn.getresponse()
     status = str(response.status)
     if not status.startswith('2'):
-        raise simplehttp.HttpError(f"HTTP Status Code: {status}", int(status))
+        raise HttpError(f"HTTP Status Code: {status}", int(status))
     # body here is byte string.
     body = response.read()
     return json.loads(body)
