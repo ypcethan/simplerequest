@@ -37,6 +37,7 @@ def test_post_json(url, params, data, expected_args, expected_data):
 
 @pytest.mark.parametrize('url,error_code', [
     ('https://httpbin.org/status/400',  400),
+    ('https://httpbin.org/status/500',  500),
 ])
 def test_post_json_error(url,  error_code):
     with pytest.raises(Exception) as e:
@@ -47,6 +48,7 @@ def test_post_json_error(url,  error_code):
 
 @pytest.mark.parametrize('url,error_code', [
     ('https://httpbin.org/status/400',  400),
+    ('https://httpbin.org/status/500',  500),
 ])
 def test_get_json_error(url,  error_code):
     with pytest.raises(Exception) as e:

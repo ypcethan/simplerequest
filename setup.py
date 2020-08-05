@@ -5,7 +5,7 @@ with open("README.md", 'r') as fid:
 
 setup(
     name="ethanypc-simplerequest",
-    version="1.0.2",
+    version="1.0.3",
     description="Wrapper around http.client",
     long_description=README,
     long_description_content_type="text/markdown",

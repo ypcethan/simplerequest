@@ -16,10 +16,11 @@ def make_request(method, url, params={}, data={}):
         data (dict, optional): Request body for POST request. Defaults to {}.
 
     Raises:
-        HttpError: [description]
+        HttpError: Client or server error, indicated by
+            status code starts with either 4 or 5. 
 
     Returns:
-        [type]: [description]
+        [dict]: Reponse body in JSON (Python dictionary) format 
     """
 
     url_parts = process_url(url, params)
@@ -32,7 +33,7 @@ def make_request(method, url, params={}, data={}):
                      body=json.dumps(data), headers=headers)
     response = conn.getresponse()
     status = str(response.status)
-    if not status.startswith('2'):
+    if status.startswith('4') or status.startswith('5'):
         raise HttpError(f"HTTP Status Code: {status}", int(status))
     # body here is byte string.
     body = response.read()
