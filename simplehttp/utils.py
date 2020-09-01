@@ -19,24 +19,25 @@ def process_url(url, params={}):
         >>> merge_path_with_params('/get?debug=true', {'limit': "20"})
         "/get?debug=true&limit=20"
     """
-    url_parts = get_url_parts(url)
-    host = url_parts['host']
-    query = url_parts['query']
-    resources_path = url_parts['path']
-    if len(query) > 0:
+    parsed_url = urlparse(url)
+    # host = url_parts['host']
+    # query = url_parts['query']
+    # resources_path = url_parts['path']
+    (host, query, resources_path) = (parsed_url.hostname, parsed_url.query,parsed_url.path)
+    if query:
         resources_path += "?" + query
-    if len(params) > 0:
+    if params:
         resources_path = merge_path_with_params(resources_path, params)
 
     return {'host': host, 'path': resources_path}
 
 
-def get_url_parts(url):
+# def get_url_parts(url):
 
-    parsed_url = urlparse(url)
+#     parsed_url = urlparse(url)
 
-    return {'host': parsed_url.hostname, 'path': parsed_url.path,
-            "query": parsed_url.query}
+#     return {'host': parsed_url.hostname, 'path': parsed_url.path,
+#             "query": parsed_url.query}
 
 
 def merge_path_with_params(path_string, params):

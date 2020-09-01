@@ -6,7 +6,7 @@ from simplehttp.error import HttpError
 from urllib.parse import urlencode
 
 
-def make_request(method, url, params={}, data={}):
+def make_request(method, url, params=None, data=None):
     """[summary]
 
     Args:
@@ -23,6 +23,8 @@ def make_request(method, url, params={}, data={}):
         [dict]: Reponse body in JSON (Python dictionary) format 
     """
 
+    params = params or {} 
+    data = data or {} 
     url_parts = process_url(url, params)
     conn = http.client.HTTPSConnection(url_parts['host'])
     if (method == 'GET'):
@@ -31,7 +33,13 @@ def make_request(method, url, params={}, data={}):
         headers = {'Content-Type': "application/json"}
         conn.request('POST', url_parts['path'],
                      body=json.dumps(data), headers=headers)
-    response = conn.getresponse()
+
+    try:
+        response = conn.getresponse()
+    except ConnectionError: 
+        print('ConnectionError')
+        raise
+
     status = str(response.status)
     if status.startswith('4') or status.startswith('5'):
         raise HttpError(f"HTTP Status Code: {status}", int(status))
