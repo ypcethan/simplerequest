@@ -1,3 +1,4 @@
+#encoding=utf-8
 import sys
 import json
 import pytest
@@ -24,9 +25,9 @@ def test_get_json(url, params, expected_result):
         "isbn": "9789863479116", "title": u"流暢的 Python"
     }),
     ('https://httpbin.org/post?debug=true', {}, {
-        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
+        "isbn": "9789863479116", "title": u"常⾒見見問題 Q&A"
     }, {'debug': 'true'}, {
-        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
+        "isbn": "9789863479116", "title": u"常⾒見見問題 Q&A"
     }),
 ])
 def test_post_json(url, params, data, expected_args, expected_data):
@@ -42,7 +43,7 @@ def test_post_json(url, params, data, expected_args, expected_data):
 def test_post_json_error(url,  error_code):
     with pytest.raises(Exception) as e:
         response = post_json(url)
-    assert e.value.message == f'HTTP Status Code: {error_code}'
+    assert e.value.message == "HTTP Status Code: %s" % str(error_code)
     assert sys.last_value.status_code == error_code
 
 
@@ -53,5 +54,5 @@ def test_post_json_error(url,  error_code):
 def test_get_json_error(url,  error_code):
     with pytest.raises(Exception) as e:
         response = get_json(url)
-    assert e.value.message == f'HTTP Status Code: {error_code}'
+    assert e.value.message == "HTTP Status Code: %s" % str(error_code)
     assert sys.last_value.status_code == error_code
