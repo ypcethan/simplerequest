@@ -1,9 +1,7 @@
 import sys
-import http.client
 import json
 from simplehttp.utils import process_url
 from simplehttp.error import HttpError
-from urllib.parse import urlencode
 
 
 def make_request(method, url, params=None, data=None):
@@ -26,26 +24,48 @@ def make_request(method, url, params=None, data=None):
     params = params or {} 
     data = data or {} 
     url_parts = process_url(url, params)
-    conn = http.client.HTTPSConnection(url_parts['host'])
-    if (method == 'GET'):
-        conn.request('GET', url_parts['path'])
-    elif (method == 'POST'):
-        headers = {'Content-Type': "application/json"}
-        conn.request('POST', url_parts['path'],
-                     body=json.dumps(data), headers=headers)
 
-    try:
-        response = conn.getresponse()
-    except ConnectionError: 
-        print('ConnectionError')
-        raise
+    try: 
+        # Python 3 
+        import http.client
+        from urllib.parse import urlencode
+        conn = http.client.HTTPSConnection(url_parts['host'])
+        if method == 'GET':
+            conn.request('GET', url_parts['path'])
+        elif method == 'POST':
+            headers = {'Content-Type': "application/json"}
+            conn.request('POST', url_parts['path'],
+                         body=json.dumps(data), headers=headers)
 
-    status = str(response.status)
-    if status.startswith('4') or status.startswith('5'):
-        raise HttpError(f"HTTP Status Code: {status}", int(status))
-    # body here is byte string.
-    body = response.read()
-    return json.loads(body)
+        try:
+            response = conn.getresponse()
+        except ConnectionError: 
+            print('ConnectionError')
+            raise
+
+        status = str(response.status)
+        if status.startswith('4') or status.startswith('5'):
+            # raise HttpError(f"HTTP Status Code: {status}", int(status))
+            raise HttpError(status)
+        # body here is byte string.
+        body = response.read()
+        return json.loads(body)
+    except ImportError:
+        # Python 2
+        import urllib2
+        extended_url = url_parts['protocal'] + "://"+ url_parts['host'] + url_parts['path']
+        if method == 'GET':
+            req = urllib2.Request(extended_url)
+            response = urllib2.urlopen(req)
+        # elif method == 'POST':
+
+        body = response.read()
+        json_data = json.loads(body)
+        print json_data 
+            
+
+        
+
 
 
 def get_json(url, params={}):

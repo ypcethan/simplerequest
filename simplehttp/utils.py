@@ -1,5 +1,9 @@
-from urllib.parse import urlparse, urlencode
 
+try:
+    from urllib.parse import urlparse, urlencode
+except ImportError:
+    from urlparse import urlparse
+    from urllib import urlencode
 
 def process_url(url, params={}):
     """Extract host name and resources path
@@ -23,13 +27,13 @@ def process_url(url, params={}):
     # host = url_parts['host']
     # query = url_parts['query']
     # resources_path = url_parts['path']
-    (host, query, resources_path) = (parsed_url.hostname, parsed_url.query,parsed_url.path)
+    (host, query, resources_path, protocal) = (parsed_url.hostname, parsed_url.query,parsed_url.path , parsed_url.scheme)
     if query:
         resources_path += "?" + query
     if params:
         resources_path = merge_path_with_params(resources_path, params)
 
-    return {'host': host, 'path': resources_path}
+    return {'host': host, 'path': resources_path ,'protocal': protocal}
 
 
 # def get_url_parts(url):
