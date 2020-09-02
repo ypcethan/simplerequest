@@ -5,7 +5,7 @@ except ImportError:
     from urlparse import urlparse
     from urllib import urlencode
 
-def process_url(url, params={}):
+def process_url(url, params=None):
     """Extract host name and resources path
 
     Args:
@@ -13,20 +13,14 @@ def process_url(url, params={}):
         params (dict, optional): Addtional query paramters. Defaults to {}.
 
     Returns:
-        [dict]: {host,path} 
+        [dict]: {host,path, protocal} 
             host: host name
             path: resource path, constructed by appending orginal resource path given parameters.
+            protocal: scheme used, (http or https)
      Examples:
-        >>> merge_path_with_params('/get', {'debug': "true"})
-        "/get?debug=true"
-
-        >>> merge_path_with_params('/get?debug=true', {'limit': "20"})
-        "/get?debug=true&limit=20"
     """
+    # Split url into components.
     parsed_url = urlparse(url)
-    # host = url_parts['host']
-    # query = url_parts['query']
-    # resources_path = url_parts['path']
     (host, query, resources_path, protocal) = (parsed_url.hostname, parsed_url.query,parsed_url.path , parsed_url.scheme)
     if query:
         resources_path += "?" + query

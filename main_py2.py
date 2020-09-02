@@ -13,29 +13,20 @@ def make_request(method , url , params = None, data=None):
         import http.client
     except ImportError:
         import urllib2
-        print "Import Error"
-        print url_parts
-        
         extended_url = url_parts['protocal'] + "://"+ url_parts['host'] + url_parts['path']
         if method == 'GET':
             req = urllib2.Request(extended_url)
         elif method == 'POST':
+
             headers = {'Content-Type': "application/json"}
-            # headers = {}
-            print 'data'
-            print data
-            encoded_data = data 
-            print encoded_data
-            print json.dumps(encoded_data)
-            req = urllib2.Request(extended_url, json.dumps(encoded_data)
+            data_str = json.dumps(data)
+            
+            req = urllib2.Request(extended_url, data_str 
 , headers)
         response = urllib2.urlopen(req)
         body = response.read()
         json_data =  json.loads(body)
-        # print json_data['args']
-        print json_data
-        print body
-
+        print json_data['args']
 
 def case2():
     url_target = "https://httpbin.org/get?debug=true"
