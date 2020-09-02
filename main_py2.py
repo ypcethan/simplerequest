@@ -3,6 +3,7 @@ import sys
 import json
 import urllib
 from simplehttp.utils import process_url
+from simplehttp.error import HttpError
 
 def make_request(method , url , params = None, data=None):
 
@@ -23,11 +24,24 @@ def make_request(method , url , params = None, data=None):
             
             req = urllib2.Request(extended_url, data_str 
 , headers)
-        response = urllib2.urlopen(req)
+
+        try:
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError as e:
+            print e
+            status = str(e.getcode())
+            print status
+        print response
+        if status.startswith('4') or status.startswith('5'):
+            # raise HttpError(f"HTTP Status Code: {status}", int(status))
+            raise HttpError(status)
         body = response.read()
         json_data =  json.loads(body)
-        print json_data['args']
+        status = str(response.getcode())
 
+        print status
+        print body 
+        print json_data['data']
 def case2():
     url_target = "https://httpbin.org/get?debug=true"
     params = {"name": "常⾒見見問題 q&a"}
@@ -35,9 +49,15 @@ def case2():
 
 def case3():
     url_target = "https://httpbin.org/post"
-    data = {"isbn": "9789863479116", "title": "流暢的 Python"}
+    data = {"isbn": "9789863479116", "title": u"流暢的 Python"}
     params = {"debug": "true"}
     make_request('POST' , url_target, params,data)
+
+def case4():
+    url_target = "https://httpbin.org/status/400"
+    make_request('GET' , url_target)
+
+
 
 if __name__ == '__main__':
 
@@ -46,5 +66,5 @@ if __name__ == '__main__':
     # params = {"name": "常⾒見見問題 q&a"}
     # make_request('get' , url_target2, params)
     # case2()
-    case3()
+    case4()
 

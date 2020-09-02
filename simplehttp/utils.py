@@ -1,4 +1,5 @@
-
+#encoding=utf-8
+from collections import OrderedDict
 try:
     from urllib.parse import urlparse, urlencode
 except ImportError:
@@ -77,6 +78,12 @@ def join_params(params):
         >>> join_params({'debug':'true','limit':'20'})
         "debug=true&limit=20"
     """
+    params = OrderedDict(params) 
     joined_params = urlencode(params)
-
+    # params_string = [] 
+    # for k in params:
+    #     v = params[k]
+    #     params_string.append( k + "=" + v)
+    # joined_params = "&".join(params_string)
+    # return joined_params
     return joined_params
