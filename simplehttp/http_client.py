@@ -61,7 +61,6 @@ def make_request(method, url, params=None, data=None):
 
         body = response.read()
         json_data = json.loads(body)
-        print json_data 
             
 
         
