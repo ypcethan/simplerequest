@@ -1,4 +1,5 @@
-#encoding=utf-8
+from __future__ import unicode_literals
+# coding=utf-8
 import sys
 import json
 import pytest
@@ -20,14 +21,14 @@ def test_get_json(url, params, expected_result):
     ('https://httpbin.org/post', {}, {}, {}, {}),
     ('https://httpbin.org/post?debug=true', {}, {}, {'debug': 'true'}, {}),
     ('https://httpbin.org/post?debug=true', {}, {
-        "isbn": "9789863479116", "title": u"流暢的 Python"
+        "isbn": "9789863479116", "title": "流暢的 Python"
     }, {'debug': 'true'}, {
-        "isbn": "9789863479116", "title": u"流暢的 Python"
+        "isbn": "9789863479116", "title": "流暢的 Python"
     }),
     ('https://httpbin.org/post?debug=true', {}, {
-        "isbn": "9789863479116", "title": u"常⾒見見問題 Q&A"
+        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
     }, {'debug': 'true'}, {
-        "isbn": "9789863479116", "title": u"常⾒見見問題 Q&A"
+        "isbn": "9789863479116", "title": "常⾒見見問題 Q&A"
     }),
 ])
 def test_post_json(url, params, data, expected_args, expected_data):

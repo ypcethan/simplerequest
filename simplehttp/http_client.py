@@ -3,10 +3,12 @@ import json
 from simplehttp.utils import process_url
 from simplehttp.error import HttpError
 
+
 def encode_dict(obj):
     for k in obj:
         obj[k] = obj[k].encode('utf-8')
     return obj
+
 
 def make_request(method, url, params=None, data=None):
     """[summary]
@@ -25,11 +27,11 @@ def make_request(method, url, params=None, data=None):
         [dict]: Reponse body in JSON (Python dictionary) format 
     """
 
-    params = params or {} 
-    data = data or {} 
+    params = params or {}
+    data = data or {}
 
-    try: 
-        # Python 3 
+    try:
+        # Python 3
         import http.client
         from urllib.parse import urlencode
         url_parts = process_url(url, params)
@@ -43,7 +45,7 @@ def make_request(method, url, params=None, data=None):
 
         try:
             response = conn.getresponse()
-        except ConnectionError: 
+        except ConnectionError:
             print('ConnectionError')
             raise
 
@@ -51,42 +53,30 @@ def make_request(method, url, params=None, data=None):
         if status.startswith('4') or status.startswith('5'):
             # raise HttpError(f"HTTP Status Code: {status}", int(status))
             raise HttpError(status)
-        # if status.startswith('4') or status.startswith('5'):
-        #     # raise HttpError(f"HTTP Status Code: {status}", int(status))
-        #     raise HttpError(status)
-        # # body here is byte string.
-        # body = response.read()
-        # json_data = json.loads(body)
-        # return json.loads(body)
     except ImportError:
         # Python 2
         import urllib2
         params = encode_dict(params)
         url_parts = process_url(url, params)
-        extended_url = url_parts['protocal'] + "://"+ url_parts['host'] + url_parts['path']
+        extended_url = url_parts['protocal'] + \
+            "://" + url_parts['host'] + url_parts['path']
         if method == 'GET':
             req = urllib2.Request(extended_url)
         elif method == 'POST':
 
             headers = {'Content-Type': "application/json"}
             data_str = json.dumps(data)
-            
-            req = urllib2.Request(extended_url, data_str 
-, headers)
+
+            req = urllib2.Request(extended_url, data_str, headers)
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError as e:
             raise HttpError(e.getcode())
 
-
     # body here is byte string.
     body = response.read()
     json_data = json.loads(body)
     return json.loads(body)
-            
-
-        
-
 
 
 def get_json(url, params={}):

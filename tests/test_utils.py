@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 # encoding=utf-8
 import pytest
 from simplehttp.utils import join_params, merge_path_with_params, process_url
