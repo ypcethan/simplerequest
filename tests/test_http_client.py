@@ -4,6 +4,7 @@ import sys
 import json
 import pytest
 from simplehttp import get_json, post_json
+from simplehttp.error import HttpError
 
 
 @pytest.mark.parametrize('url,params,expected_result', [
@@ -41,8 +42,8 @@ def test_post_json(url, params, data, expected_args, expected_data):
     ('https://httpbin.org/status/400',  400),
     ('https://httpbin.org/status/500',  500),
 ])
-def test_post_json_error(url,  error_code):
-    with pytest.raises(Exception) as e:
+def test_post_json_error_code(url,  error_code):
+    with pytest.raises(HttpError) as e:
         response = post_json(url)
     assert e.value.message == "HTTP Status Code: %s" % str(error_code)
     assert sys.last_value.status_code == error_code
@@ -52,8 +53,8 @@ def test_post_json_error(url,  error_code):
     ('https://httpbin.org/status/400',  400),
     ('https://httpbin.org/status/500',  500),
 ])
-def test_get_json_error(url,  error_code):
-    with pytest.raises(Exception) as e:
+def test_get_json_error_code(url,  error_code):
+    with pytest.raises(HttpError) as e:
         response = get_json(url)
     assert e.value.message == "HTTP Status Code: %s" % str(error_code)
     assert sys.last_value.status_code == error_code
