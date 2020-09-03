@@ -68,6 +68,8 @@ def merge_path_with_params(path_string, params):
 
 def join_params(params):
     """Return a string of parameters join togeter with & as delemeter
+       The order of parameters is determined by the key values, from left to right 
+       in ascending order.
 
     Args:
         params (dict): A dictionary of parameters 
@@ -78,12 +80,10 @@ def join_params(params):
         >>> join_params({'debug':'true','limit':'20'})
         "debug=true&limit=20"
     """
-    params = OrderedDict(params) 
-    joined_params = urlencode(params)
-    # params_string = [] 
-    # for k in params:
-    #     v = params[k]
-    #     params_string.append( k + "=" + v)
-    # joined_params = "&".join(params_string)
-    # return joined_params
+    # joined_params = urlencode(params)
+    params_string = [] 
+    for k in sorted(params.keys()):
+        v = params[k]
+        params_string.append( str(k) + "=" + str(v))
+    joined_params = "&".join(params_string)
     return joined_params
