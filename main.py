@@ -40,10 +40,15 @@ def case3():
     assert r['args'] == {'debug': 'true'}
 
 
+def noneValidJson():
+    url_target = "https://google.com"
+    r = simplehttp.get_json(url_target)
+
+
 def connectionError():
-    url_target = "https://google.m/sawer"
+    url_target = "https://google.com/sawer"
     r = simplehttp.get_json(url_target)
 
 
 if __name__ == '__main__':
-    connectionError()
+    noneValidJson()

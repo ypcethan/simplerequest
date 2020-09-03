@@ -1,7 +1,8 @@
 import sys
 import json
+from json.decoder import JSONDecodeError
 from simplehttp.utils import process_url
-from simplehttp.error import HttpError
+from simplehttp.error import HttpError, NoneJSONReourceError
 
 
 def encode_dict(obj):
@@ -26,6 +27,11 @@ def make_request(method, url, params=None, data=None):
     Returns:
         [dict]: Reponse body in JSON (Python dictionary) format 
     """
+
+    # if method = 'GET':
+    #     make_get_request(...)
+    # elif method = 'POST':
+    #     make_post_request(...)
 
     params = params or {}
     data = data or {}
@@ -74,6 +80,7 @@ def make_request(method, url, params=None, data=None):
 
     # body here is byte string.
     body = response.read()
+
     json_data = json.loads(body)
     return json.loads(body)
 
