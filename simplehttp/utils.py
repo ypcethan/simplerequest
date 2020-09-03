@@ -1,10 +1,11 @@
-#encoding=utf-8
+# encoding=utf-8
 from collections import OrderedDict
 try:
     from urllib.parse import urlparse, urlencode
 except ImportError:
     from urlparse import urlparse
     from urllib import urlencode
+
 
 def process_url(url, params=None):
     """Extract host name and resources path
@@ -22,13 +23,14 @@ def process_url(url, params=None):
     """
     # Split url into components.
     parsed_url = urlparse(url)
-    (host, query, resources_path, protocal) = (parsed_url.hostname, parsed_url.query,parsed_url.path , parsed_url.scheme)
+    (host, query, resources_path, protocal) = (parsed_url.hostname,
+                                               parsed_url.query, parsed_url.path, parsed_url.scheme)
     if query:
         resources_path += "?" + query
     if params:
         resources_path = merge_path_with_params(resources_path, params)
 
-    return {'host': host, 'path': resources_path ,'protocal': protocal}
+    return {'host': host, 'path': resources_path, 'protocal': protocal}
 
 
 # def get_url_parts(url):
@@ -80,10 +82,9 @@ def join_params(params):
         >>> join_params({'debug':'true','limit':'20'})
         "debug=true&limit=20"
     """
-    # joined_params = urlencode(params)
-    params_string = [] 
+    params_string = []
     for k in sorted(params.keys()):
         v = params[k]
-        params_string.append( str(k) + "=" + str(v))
+        params_string.append(str(k) + "=" + str(v))
     joined_params = "&".join(params_string)
     return joined_params
