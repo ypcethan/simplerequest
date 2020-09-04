@@ -14,6 +14,20 @@ except ImportError:
 
 
 def make_get_request(url, params):
+    """
+    Making http GET request for both Python2 and Python3
+
+    Args:
+        url (string): 
+        params (dict, optional):  Addtional parameters wish to add to the query string. 
+
+    Raises:
+        HttpError: Client or server error, indicated by
+            status code starts with either 4 or 5. 
+
+    Returns:
+        [dict]: Reponse body in JSON (Python dictionary) format 
+    """
     url_parts = process_url(url, params)
 
     try:
@@ -39,13 +53,26 @@ def make_get_request(url, params):
             raise HttpError(e.getcode())
 
     body = response.read()
-    print(body)
 
     json_data = json.loads(body)
     return json.loads(body)
 
 
 def make_post_request(url, params, data):
+    """
+    Making http GET request for both Python2 and Python3
+
+    Args:
+        url (string): 
+        params (dict, optional):  Addtional parameters wish to add to the query string. 
+
+    Raises:
+        HttpError: Client or server error, indicated by
+            status code starts with either 4 or 5. 
+
+    Returns:
+        [dict]: Reponse body in JSON (Python dictionary) format 
+    """
     url_parts = process_url(url, params)
     headers = {'Content-Type': "application/json"}
     data_str = json.dumps(data)
@@ -99,6 +126,7 @@ def make_request(method, url, params=None, data=None):
     params = params or {}
     data = data or {}
     # try:
+
     if method == 'GET':
         return make_get_request(url, params)
     elif method == 'POST':
