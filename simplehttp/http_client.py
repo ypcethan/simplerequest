@@ -1,36 +1,34 @@
 import sys
 import json
+import logging
 from simplehttp.utils import process_url
 from simplehttp.error import HttpError
 
-
-def encode_dict(obj):
-    for k in obj:
-        obj[k] = obj[k].encode('utf-8')
-    return obj
+try:
+    # Python 3
+    import http.client
+    from urllib.parse import urlencode
+except ImportError:
+    # Python 2
+    import urllib2
 
 
 def make_get_request(url, params):
     url_parts = process_url(url, params)
+
     try:
-        # Python 3
-        import http.client
-        from urllib.parse import urlencode
         conn = http.client.HTTPSConnection(url_parts['host'])
         conn.request('GET', url_parts['path'])
         try:
             response = conn.getresponse()
         except Exception as e:
-            print(e)
+            logging.error(e)
             raise
         status = str(response.status)
         if status.startswith('4') or status.startswith('5'):
             raise HttpError(status)
 
-    except ImportError:
-        # Python 2
-        import urllib2
-        params = encode_dict(params)
+    except NameError:
         extended_url = url_parts['protocal'] + \
             "://" + url_parts['host'] + url_parts['path']
         req = urllib2.Request(extended_url)
@@ -41,6 +39,7 @@ def make_get_request(url, params):
             raise HttpError(e.getcode())
 
     body = response.read()
+    print(body)
 
     json_data = json.loads(body)
     return json.loads(body)
@@ -52,25 +51,19 @@ def make_post_request(url, params, data):
     data_str = json.dumps(data)
 
     try:
-        # Python 3
-        import http.client
-        from urllib.parse import urlencode
         conn = http.client.HTTPSConnection(url_parts['host'])
         conn.request('POST', url_parts['path'],
                      body=data_str, headers=headers)
         try:
             response = conn.getresponse()
         except Exception as e:
-            print(e)
+            logging.error(e)
             raise
         status = str(response.status)
         if status.startswith('4') or status.startswith('5'):
             raise HttpError(status)
 
-    except ImportError:
-        # Python 2
-        import urllib2
-        params = encode_dict(params)
+    except NameError:
         extended_url = url_parts['protocal'] + \
             "://" + url_parts['host'] + url_parts['path']
 
@@ -103,14 +96,9 @@ def make_request(method, url, params=None, data=None):
         [dict]: Reponse body in JSON (Python dictionary) format 
     """
 
-    # if method = 'GET':
-    #     make_get_request(...)
-    # elif method = 'POST':
-    #     make_post_request(...)
-
     params = params or {}
     data = data or {}
-
+    # try:
     if method == 'GET':
         return make_get_request(url, params)
     elif method == 'POST':

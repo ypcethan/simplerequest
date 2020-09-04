@@ -2,26 +2,7 @@
 import json
 import sys
 import simplehttp
-
-# r = simplehttp.post_json("https://httpbin.org/status/400")
-# try:
-#     r = simplehttp.post_json("https://httpbin.org/status/400")
-# except Exception as e:
-#     print(e)
-#     print('asdf')
-#     print(sys.last_value.status_code)
-#     ttype, value, tb = sys.exc_info()
-#     print(ttype)
-#     print(value)
-#     print(tb)
-#     sys.last_value = value
-#     print(sys.last_value.status_code)
-
-
-def encode_dict(obj):
-    for k in obj:
-        obj[k] = obj[k].encode('utf-8')
-    return obj
+from simplehttp.error import HttpError
 
 
 def case2():
@@ -40,8 +21,16 @@ def case3():
     assert r['args'] == {'debug': 'true'}
 
 
+def errorCode():
+    try:
+        r = simplehttp.post_json("https://httpbin.org/status/400")
+    except HttpError as e:
+        print(e)
+        print(e.message)
+
+
 def noneValidJson():
-    url_target = "https://google.com"
+    url_target = "https://google.com/"
     r = simplehttp.get_json(url_target)
 
 
@@ -52,3 +41,4 @@ def connectionError():
 
 if __name__ == '__main__':
     noneValidJson()
+    # errorCode()

@@ -33,14 +33,6 @@ def process_url(url, params=None):
     return {'host': host, 'path': resources_path, 'protocal': protocal}
 
 
-# def get_url_parts(url):
-
-#     parsed_url = urlparse(url)
-
-#     return {'host': parsed_url.hostname, 'path': parsed_url.path,
-#             "query": parsed_url.query}
-
-
 def merge_path_with_params(path_string, params):
     """Appending path string with query parameters
 
@@ -60,18 +52,16 @@ def merge_path_with_params(path_string, params):
     if len(params) == 0:
         return path_string
     process_params = join_params(params)
-    if '?' in path_string:
-        # path already contains query parameters.
-        path_string += "&" + process_params
-    else:
-        path_string += '?' + process_params
-    return path_string
+    # append '&' or "?" base on whether the path already contain query parameters.
+    path_string += "&" if "?" in path_string else "?"
+
+    return path_string + process_params
 
 
 def join_params(params):
     """Return a string of parameters join togeter with & as delemeter
        The order of parameters is determined by the key values, from left to right 
-       in ascending order.
+       in ascending order. This is to keep the order consistant across Python versions.
 
     Args:
         params (dict): A dictionary of parameters 
@@ -82,9 +72,9 @@ def join_params(params):
         >>> join_params({'debug':'true','limit':'20'})
         "debug=true&limit=20"
     """
-    params_string = []
+    params_array = []
     for k in sorted(params.keys()):
         v = params[k]
-        params_string.append(str(k) + "=" + str(v))
-    joined_params = "&".join(params_string)
+        params_array.append(str(k) + "=" + str(v))
+    joined_params = "&".join(params_array)
     return joined_params
