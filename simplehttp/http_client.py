@@ -60,7 +60,7 @@ def make_get_request(url, params):
 
 def make_post_request(url, params, data):
     """
-    Making http GET request for both Python2 and Python3
+    Making http POST request for both Python2 and Python3
 
     Args:
         url (string): 
