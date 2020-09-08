@@ -1,8 +1,10 @@
 # encoding=utf-8
+from __future__ import unicode_literals
 try:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse, urlencode
 except ImportError:
     from urlparse import urlparse
+    from urllib import urlencode
 
 
 def process_url(url, params=None):
@@ -30,7 +32,6 @@ def process_url(url, params=None):
         resources_path += "?" + query
     if params:
         resources_path = merge_path_with_params(resources_path, params)
-
     return {'host': host, 'path': resources_path, 'protocal': protocal}
 
 
@@ -60,6 +61,29 @@ def merge_path_with_params(path_string, params):
     return path_string + process_params
 
 
+def encode_params(params):
+    """
+        Convert unicode type to string.
+        This is specifically for Python 2
+        As urlencode only takes in tuple or dict 
+        with str or byte as input.
+    """
+
+    encoded_params = {}
+    for key, value in params.items():
+        try:
+            key = key.encode('utf-8')
+        except AttributeError as e:
+            key = str(key)
+        try:
+            value = value.encode('utf-8')
+        except AttributeError as e:
+            value = str(value)
+
+        encoded_params[key] = value
+    return encoded_params
+
+
 def join_params(params):
     """Return a string of parameters join togeter with & as delemeter
        The order of parameters is determined by the key values,
@@ -75,9 +99,10 @@ def join_params(params):
         >>> join_params({'debug':'true','limit':'20'})
         "debug=true&limit=20"
     """
+    encoded_params = encode_params(params)
     params_array = []
-    for param in sorted(params.keys()):
-        value = params[param]
-        params_array.append(str(param) + "=" + str(value))
-    joined_params = "&".join(params_array)
+    for key in sorted(encoded_params.keys()):
+        value = encoded_params[key]
+        params_array.append((key, value))
+    joined_params = urlencode(params_array)
     return joined_params

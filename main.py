@@ -40,5 +40,6 @@ def connectionError():
 
 
 if __name__ == '__main__':
-    noneValidJson()
+    # noneValidJson()
     # errorCode()
+    case2()
