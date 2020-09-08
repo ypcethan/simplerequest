@@ -44,7 +44,7 @@ def make_get_request(url, params):
 
     except NameError:
         extended_url = url_parts['protocal'] + \
-            '://' + url_parts['host'] + url_parts['path']
+            "://" + url_parts['host'] + url_parts['path']
         req = urllib2.Request(extended_url)
 
         try:
