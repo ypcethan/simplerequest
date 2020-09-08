@@ -17,7 +17,7 @@ def make_get_request(url, params):
     Making http GET request for both Python2 and Python3
 
     Args:
-        url (string):URL path
+        url (string): URL path
         params (dict, optional):Addtional parameters
             to  be added to the query string.
 
@@ -44,7 +44,7 @@ def make_get_request(url, params):
 
     except NameError:
         extended_url = url_parts['protocal'] + \
-            "://" + url_parts['host'] + url_parts['path']
+            '://' + url_parts['host'] + url_parts['path']
         req = urllib2.Request(extended_url)
 
         try:
@@ -62,8 +62,8 @@ def make_post_request(url, params, data):
     Making http POST request for both Python2 and Python3
 
     Args:
-        url (string):URL path
-        params (dict, optional):Addtional parameters
+        url (string): URL path
+        params (dict, optional): Addtional parameters
             to  be added to the query string.
 
     Raises:
@@ -74,7 +74,7 @@ def make_post_request(url, params, data):
         [dict]: Reponse body in JSON (Python dictionary) format
     """
     url_parts = process_url(url, params)
-    headers = {'Content-Type': "application/json"}
+    headers = {'Content-Type': 'application/json'}
     data_str = json.dumps(data)
 
     try:
@@ -111,7 +111,7 @@ def make_request(method, url, params=None, data=None):
     Args:
         method (string): Either GET or POST
         url (string): URL path
-        params (dict, optional):Addtional parameters
+        params (dict, optional): Addtional parameters
             to  be added to the query string.
         data (dict, optional): Request body for POST request. Defaults to {}.
 
@@ -160,7 +160,7 @@ def post_json(url, params=None, data=None):
 
     Args:
         url (string): URL path
-        params (dict, optional):Addtional parameters
+        params (dict, optional): Addtional parameters
             to  be added to the query string.
         data (dict, optional): Request body.
 

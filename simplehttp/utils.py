@@ -16,10 +16,10 @@ def process_url(url, params=None):
 
     Returns:
         [dict]: {host,path, protocal}
-            host: host name
-            path: resource path, constructed by appending
+            host: Host name
+            path: Resource path, constructed by appending
                     orginal resource path given parameters.
-            protocal: scheme used, (http or https)
+            protocal: Scheme used, (http or https)
      Examples:
     """
     # Split url into components.
@@ -39,11 +39,11 @@ def merge_path_with_params(path_string, params):
     """Appending path string with query parameters
 
     Args:
-        path_string (str): resource path
-        params (dict): query parameters
+        path_string (str): Resource path
+        params (dict): Query parameters
 
     Returns:
-        [string]: updated resource path.
+        [string]: Updated resource path.
     Examples:
         >>> merge_path_with_params('/get', {'debug': "true"})
         "/get?debug=true"
@@ -51,7 +51,7 @@ def merge_path_with_params(path_string, params):
         >>> merge_path_with_params('/get?debug=true', {'limit': "20"})
         "/get?debug=true&limit=20"
     """
-    if len(params) == 0:
+    if params:
         return path_string
     process_params = join_params(params)
     # append '&' or "?" base on whether the path already
