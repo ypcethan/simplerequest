@@ -3,15 +3,16 @@ import json
 import logging
 from simplehttp.utils import process_url
 from simplehttp.error import HttpError
-
-try:
-    # Python 3
-    # import http.client
-    from simplehttp.request3 import http_get, http_post
-except ImportError:
-    # Python 2
-    # import urllib2
-    from simplehttp.request2 import http_get, http_post
+from simplehttp.request import http_get, http_post
+# try:
+#     # Python 3
+#     # import http.client
+#     from simplehttp.request3 import http_get, http_post
+# except ImportError:
+#     # Python 2
+#     # import urllib2
+#     from simplehttp.request2 import http_get, http_post
+#
 
 
 def make_get_request(url, params):
