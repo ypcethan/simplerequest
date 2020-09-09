@@ -1,11 +1,15 @@
 import json
+from simplehttp.error import HttpError
 
 
 def http_get(url_parts):
 
     try:
         import http.client
-        conn = http.client.HTTPSConnection(url_parts['host'])
+        if url_parts['host'] == 'http':
+            conn = http.client.HTTPConnection(url_parts['host'])
+        else:
+            conn = http.client.HTTPSConnection(url_parts['host'])
         conn.request('GET', url_parts['path'])
         response = conn.getresponse()
         status_code = str(response.status)
@@ -27,10 +31,15 @@ def http_get(url_parts):
             # raise HttpError(error.getcode())
 
         status_code = str(status_code)
-    if data:
+
+    if status_code.startswith('4') or status_code.startswith('5'):
+        raise HttpError(status_code)
+
+    try:
         data_json = json.loads(data)
-    else:
+    except (ValueError, JSONDecodeError):
         data_json = {}
+
     return str(status_code), data_json
 
 

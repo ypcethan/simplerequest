@@ -29,8 +29,8 @@ def make_get_request(url, params):
         status_code, data = http_get(url_parts)
     except Exception as err:
         logging.error(err)
-        # raise UnexpectedHttpError(err)
-        raise err
+        raise UnexpectedHttpError(err)
+        # raise err
 
     if status_code.startswith('4') or status_code.startswith('5'):
         raise HttpError(status_code)
@@ -59,8 +59,8 @@ def make_post_request(url, params, data):
         status_code, data = http_post(url_parts, data)
     except Exception as err:
         logging.error(err)
-        # raise UnexpectedHttpError(err)
-        raise err
+        raise UnexpectedHttpError(err)
+        # raise err
 
     if status_code.startswith('4') or status_code.startswith('5'):
         raise HttpError(status_code)
