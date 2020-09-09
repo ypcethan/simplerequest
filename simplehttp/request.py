@@ -1,11 +1,15 @@
+import sys
 import json
 from simplehttp.error import HttpError
 
+try:
+    import http.client
+except ImportError:
+    import urllib2
+
 
 def http_get(url_parts):
-
-    try:
-        import http.client
+    if sys.version_info[0] > 2:
         if url_parts['host'] == 'http':
             conn = http.client.HTTPConnection(url_parts['host'])
         else:
@@ -15,8 +19,7 @@ def http_get(url_parts):
         status_code = str(response.status)
         data = response.read()
 
-    except ImportError:
-        import urllib2
+    else:
         extended_url = url_parts['protocal'] + \
             '://' + url_parts['host'] + url_parts['path']
         req = urllib2.Request(extended_url)
@@ -45,9 +48,7 @@ def http_post(url_parts, data):
 
     headers = {'Content-Type': 'application/json'}
     data_str = json.dumps(data)
-    try:
-        import http.client
-
+    if sys.version_info[0] > 2:
         conn = http.client.HTTPSConnection(url_parts['host'])
         conn.request('POST', url_parts['path'],
                      body=data_str, headers=headers
@@ -56,8 +57,7 @@ def http_post(url_parts, data):
         status_code = str(response.status)
         data = response.read()
 
-    except ImportError:
-        import urllib2
+    else:
 
         extended_url = url_parts['protocal'] + \
             '://' + url_parts['host'] + url_parts['path']
