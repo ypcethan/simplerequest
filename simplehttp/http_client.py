@@ -2,16 +2,8 @@ import sys
 import json
 import logging
 from simplehttp.utils import process_url
-from simplehttp.error import HttpError
+from simplehttp.error import HttpError, UnexpectedHttpError
 from simplehttp.request import http_get, http_post
-# try:
-#     # Python 3
-#     # import http.client
-#     from simplehttp.request3 import http_get, http_post
-# except ImportError:
-#     # Python 2
-#     # import urllib2
-#     from simplehttp.request2 import http_get, http_post
 #
 
 
@@ -37,7 +29,8 @@ def make_get_request(url, params):
         status_code, data = http_get(url_parts)
     except Exception as err:
         logging.error(err)
-        raise UnexpectedHttpError(err)
+        # raise UnexpectedHttpError(err)
+        raise err
 
     if status_code.startswith('4') or status_code.startswith('5'):
         raise HttpError(status_code)
@@ -66,7 +59,8 @@ def make_post_request(url, params, data):
         status_code, data = http_post(url_parts, data)
     except Exception as err:
         logging.error(err)
-        raise UnexpectedHttpError(err)
+        # raise UnexpectedHttpError(err)
+        raise err
 
     if status_code.startswith('4') or status_code.startswith('5'):
         raise HttpError(status_code)
