@@ -7,34 +7,11 @@ from simplehttp.error import HttpError
 try:
     # Python 3
     # import http.client
-    from simplehttp.request3 import http_get
+    from simplehttp.request3 import http_get, http_post
 except ImportError:
     # Python 2
     # import urllib2
-    from simplehttp.request2 import http_get
-
-#
-# def http_get(url_parts):
-#     conn = http.client.HTTPSConnection(url_parts['host'])
-#     conn.request('GET', url_parts['path'])
-#     response = conn.getresponse()
-#
-#     return response.status, response.read()
-#
-#
-# def http_get_py2(url_parts):
-#     extended_url = url_parts['protocal'] + \
-#         '://' + url_parts['host'] + url_parts['path']
-#     req = urllib2.Request(extended_url)
-#     try:
-#         response = urllib2.urlopen(req)
-#         status_code = response.getcode()
-#     except urllib2.HTTPError as error:
-#         response = ""
-#         status_code = error.getcode()
-#         # raise HttpError(error.getcode())
-#     return status_code, response
-#
+    from simplehttp.request2 import http_get, http_post
 
 
 def make_get_request(url, params):
@@ -56,65 +33,44 @@ def make_get_request(url, params):
     url_parts = process_url(url, params)
 
     try:
-        status, body = http_get(url_parts)
+        status_code, data = http_get(url_parts)
     except Exception as err:
         logging.error(err)
         raise UnexpectedHttpError(err)
 
-    if status.startswith('4') or status.startswith('5'):
-        raise HttpError(status)
+    if status_code.startswith('4') or status_code.startswith('5'):
+        raise HttpError(status_code)
 
-    return body
+    return data
 
 
 def make_post_request(url, params, data):
-    pass
-# def make_post_request(url, params, data):
-#     """
-#     Making http POST request for both Python2 and Python3
-#
-#     Args:
-#         url (string): URL path
-#         params (dict, optional): Addtional parameters
-#             to  be added to the query string.
-#
-#     Raises:
-#         HttpError: Client or server error, indicated by
-#             status code starts with either 4 or 5.
-#
-#     Returns:
-#         [dict]: Reponse body in JSON (Python dictionary) format
-#     """
-#     url_parts = process_url(url, params)
-#     headers = {'Content-Type': 'application/json'}
-#     data_str = json.dumps(data)
-#
-#     try:
-#         conn = http.client.HTTPSConnection(url_parts['host'])
-#         conn.request('POST', url_parts['path'],
-#                      body=data_str, headers=headers)
-#         try:
-#             response = conn.getresponse()
-#         except Exception as error:
-#             logging.error(error)
-#             raise
-#         status = str(response.status)
-#         if status.startswith('4') or status.startswith('5'):
-#             raise HttpError(status)
-#
-#     except NameError:
-#         extended_url = url_parts['protocal'] + \
-#             "://" + url_parts['host'] + url_parts['path']
-#
-#         req = urllib2.Request(extended_url, data_str, headers)
-#         try:
-#             response = urllib2.urlopen(req)
-#         except urllib2.HTTPError as error:
-#             raise HttpError(error.getcode())
-#
-#     body = response.read()
-#
-#     return json.loads(body)
+    """
+    Making http POST request for both Python2 and Python3
+
+    Args:
+        url (string): URL path
+        params (dict, optional): Addtional parameters
+            to  be added to the query string.
+
+    Raises:
+        HttpError: Client or server error, indicated by
+            status code starts with either 4 or 5.
+
+    Returns:
+        [dict]: Reponse body in JSON (Python dictionary) format
+    """
+    url_parts = process_url(url, params)
+    try:
+        status_code, data = http_post(url_parts, data)
+    except Exception as err:
+        logging.error(err)
+        raise UnexpectedHttpError(err)
+
+    if status_code.startswith('4') or status_code.startswith('5'):
+        raise HttpError(status_code)
+
+    return data
 
 
 def make_request(method, url, params=None, data=None):
