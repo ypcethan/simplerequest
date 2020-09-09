@@ -14,17 +14,32 @@ def test_join_params(params,  expected_result):
     assert join_params(params) == expected_result
 
 
-@pytest.mark.parametrize('path, params,expected_result', [
-    ('/post', {}, '/post'),
-    ('/post', {'debug': "true"}, '/post?debug=true'),
-    ('/get', {'debug': "true"}, '/get?debug=true'),
-    ('/get?debug=true', {'limit': "20"}, '/get?debug=true&limit=20'),
-    ('/get?debug=true', {'limit': "20", 'time': '1h'},
-     '/get?debug=true&limit=20&time=1h'),
-])
-def test_merge_path_with_params(path, params, expected_result):
-    assert merge_path_with_params(path, params) == expected_result
+# @pytest.mark.parametrize('path, params,expected_result', [
+#     ('/post', {}, '/post'),
+#     ('/post', {'debug': "true"}, '/post?debug=true'),
+#     ('/get', {'debug': "true"}, '/get?debug=true'),
+#     ('/get?debug=true', {'limit': "20"}, '/get?debug=true&limit=20'),
+#     ('/get?debug=true', {'limit': "20", 'time': '1h'},
+#      '/get?debug=true&limit=20&time=1h'),
+# ])
+# def test_merge_path_with_params(path, params, expected_result):
+#     assert merge_path_with_params(path, params) == expected_result
 
+@pytest.mark.parametrize(
+    "path,params,joined_params,expected_result", [
+        ('/post', {'debug': 'true'}, 'debug=true', '/post?debug=true'),
+        ('/get', {'debug': 'true', 'limit': 20},
+         "debug=true&limit=20", '/get?debug=true'),
+        ('/get?debug=true', {'limit': '20'},
+         'limit=20', '/get?debug=true&limit=20'),
+    ]
+)
+def test_merge_path_with_params(path, params, joined_params, expected_result):
+    mocker.patch(
+        'simplehttp.utils..join_params',
+        return_value=joined_params
+    )
+    assert merge_path_with_params(path, params) == expected_result
 
 # @pytest.mark.parametrize('url, expected_result', [
 #     ('https://httpbin.org/get?debug=true&par2=232',

@@ -2,8 +2,9 @@
 import sys
 import json
 import urllib
-from simplehttp.utils import process_url
-from simplehttp.error import HttpError
+import urllib2
+# from simplehttp.utils import process_url
+# from simplehttp.error import HttpError
 
 
 def make_request(method, url, params=None, data=None):
@@ -63,6 +64,18 @@ def case4():
     make_request('GET', url_target)
 
 
+def urllibExample():
+    # url_target = "https://httpbin.org/get?debug=true"
+    url_target = "https://httpbin.org/status/400"
+    headers = {'Accept': "application/json"}
+    req = urllib2.Request(url_target, headers=headers)
+    response = urllib2.urlopen(req)
+    status = response.getcode()
+    print(response.read())
+    print(status)
+
+
 if __name__ == '__main__':
 
-    case4()
+    # case4()
+    urllibExample()
