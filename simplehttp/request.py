@@ -28,8 +28,6 @@ def http_get(url_parts):
             # TODO: What if json.loads raise error ?"
             data = ""
             status_code = error.getcode()
-            # raise HttpError(error.getcode())
-
         status_code = str(status_code)
 
     if status_code.startswith('4') or status_code.startswith('5'):
@@ -40,7 +38,7 @@ def http_get(url_parts):
     except (ValueError, JSONDecodeError):
         data_json = {}
 
-    return str(status_code), data_json
+    return status_code, data_json
 
 
 def http_post(url_parts, data):
@@ -73,9 +71,14 @@ def http_post(url_parts, data):
             # TODO: What if json.loads raise error ?"
             data = ""
             status_code = error.getcode()
-            # raise HttpError(error.getcode())
-    if data:
+        status_code = str(status_code)
+
+    if status_code.startswith('4') or status_code.startswith('5'):
+        raise HttpError(status_code)
+
+    try:
         data_json = json.loads(data)
-    else:
+    except (ValueError, JSONDecodeError):
         data_json = {}
-    return str(status_code), data_json
+
+    return status_code, data_json

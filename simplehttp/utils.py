@@ -20,7 +20,6 @@ def process_url(url, params=None):
             path: Resource path, constructed by appending
                     orginal resource path given parameters.
             protocal: Scheme used, (http or https)
-     Examples:
     """
     # Split url into components.
     parsed_url = urlparse(url)
@@ -70,6 +69,7 @@ def encode_params(params):
     """
 
     encoded_params = {}
+
     for key, value in params.items():
         try:
             key = key.encode('utf-8')
@@ -100,9 +100,8 @@ def join_params(params):
         "debug=true&limit=20"
     """
     encoded_params = encode_params(params)
-    params_array = []
-    for key in sorted(encoded_params.keys()):
-        value = encoded_params[key]
-        params_array.append((key, value))
-    joined_params = urlencode(params_array)
+    params_array_sorted_by_keys = sorted(
+        params.items(), key=lambda item: item[0])
+
+    joined_params = urlencode(params_array_sorted_by_keys)
     return joined_params
