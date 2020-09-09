@@ -1,6 +1,7 @@
 import sys
 import json
 from simplehttp.error import HttpError
+from simplehttp.utils import process_url
 
 try:
     import http.client
@@ -8,7 +9,8 @@ except ImportError:
     import urllib2
 
 
-def http_get(url_parts):
+def http_get(url, params):
+    url_parts = process_url(url, params)
     if sys.version_info[0] > 2:
         if url_parts['host'] == 'http':
             conn = http.client.HTTPConnection(url_parts['host'])
@@ -41,11 +43,12 @@ def http_get(url_parts):
     except (ValueError, JSONDecodeError):
         data_json = {}
 
-    return status_code, data_json
+    return data_json
 
 
-def http_post(url_parts, data):
+def http_post(url, params, data):
 
+    url_parts = process_url(url, params)
     headers = {'Content-Type': 'application/json'}
     data_str = json.dumps(data)
     if sys.version_info[0] > 2:
@@ -81,4 +84,4 @@ def http_post(url_parts, data):
     except (ValueError, JSONDecodeError):
         data_json = {}
 
-    return status_code, data_json
+    return data_json
