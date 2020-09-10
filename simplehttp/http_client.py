@@ -1,7 +1,5 @@
 import sys
-import json
 import logging
-from simplehttp.utils import process_url
 from simplehttp.error import HttpError, UnexpectedHttpError
 from simplehttp.request import http_get, http_post
 

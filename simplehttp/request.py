@@ -10,6 +10,21 @@ except ImportError:
 
 
 def http_get(url, params):
+    """A wrapper for making http GET request for both
+       Python2 and Python3
+
+    Args:
+        url (string): URL path
+        params (dict, optional):Addtional parameters
+            to  be added to the query string.
+
+    Raise:
+        URLError , HTTPError from urllib2
+
+
+    Returns:
+        [dict]: Reponse body in JSON (Python dictionary) format
+    """
     url_parts = process_url(url, params)
     if sys.version_info[0] > 2:
         if url_parts['host'] == 'http':
@@ -17,6 +32,7 @@ def http_get(url, params):
         else:
             conn = http.client.HTTPSConnection(url_parts['host'])
         conn.request('GET', url_parts['path'])
+        # TODO: Here may have ConnectionError
         response = conn.getresponse()
         status_code = str(response.status)
         data = response.read()
@@ -26,6 +42,8 @@ def http_get(url, params):
             '://' + url_parts['host'] + url_parts['path']
         req = urllib2.Request(extended_url)
         try:
+            # TODO: "Maybe write our own error class to wrap
+            # whatever error urlopen may raise.
             response = urllib2.urlopen(req)
             status_code = response.getcode()
             data = response.read()
