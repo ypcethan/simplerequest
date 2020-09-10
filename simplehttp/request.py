@@ -9,7 +9,7 @@ except ImportError:
     import urllib2
 
 
-def http_get(url, params):
+def http_get(url, params=None):
     """A wrapper for making http GET request for both
        Python2 and Python3
 
@@ -25,6 +25,7 @@ def http_get(url, params):
     Returns:
         [dict]: Reponse body in JSON (Python dictionary) format
     """
+    params = params or {}
     url_parts = process_url(url, params)
     if sys.version_info[0] > 2:
         if url_parts['host'] == 'http':
@@ -64,8 +65,10 @@ def http_get(url, params):
     return data_json
 
 
-def http_post(url, params, data):
+def http_post(url, params={}, data={}):
 
+    params = params or {}
+    data = data or {}
     url_parts = process_url(url, params)
     headers = {'Content-Type': 'application/json'}
     data_str = json.dumps(data)

@@ -9,7 +9,6 @@ import pdb
 def case2():
     url_target = "https://httpbin.org/get?debug=true"
     params = {"name": u"常⾒見見問題 q&a"}
-    pdb.set_trace()
     r = simplehttp.get_json(url_target, params)
     print(simplehttp)
     assert r['args'] == {'debug': 'true', 'name': u'常⾒見見問題 q&a'}
@@ -26,6 +25,7 @@ def case3():
 
 def errorCode():
     try:
+        pdb.set_trace()
         r = simplehttp.post_json("https://httpbin.org/status/400")
     except HttpError as e:
         print(e)
@@ -44,5 +44,4 @@ def connectionError():
 
 if __name__ == '__main__':
     # noneValidJson()
-    # errorCode()
-    case2()
+    errorCode()
