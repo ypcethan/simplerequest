@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f78838875e22d2fcccf14e17653577019713ecf5a972511835106656c821e057"
+            "sha256": "2c31d8d6563267801372568b87ac023090dbe72c51c55ed4e3f15f0885eed99c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,7 +15,12 @@
             }
         ]
     },
-    "default": {},
+    "default": {
+        "ethanypc-simplerequest": {
+            "editable": true,
+            "path": "."
+        }
+    },
     "develop": {
         "appdirs": {
             "hashes": [

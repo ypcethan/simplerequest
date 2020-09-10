@@ -11,6 +11,7 @@ autopep8 = "==1.5.4"
 pytest-mock = "==3.3.1"
 
 [packages]
+ethanypc-simplerequest = {editable = true, path = "."}
 
 [requires]
 python_version = "3.7"
