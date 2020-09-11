@@ -12,4 +12,6 @@ test-large:
 test-all:
 	tox
 
+test-only-local:
+	pytest
 

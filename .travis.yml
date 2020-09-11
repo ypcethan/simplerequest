@@ -1,13 +1,11 @@
 language: python
 python:
 - '2.7'
-- '3.6'
-- '3.7'
 - '3.8'
 install:
 - make setup 
 script:
-- make test-all
+- make test-only-local 
 deploy:
   distributions: sdist bdist_wheel
   skip_existing: true
