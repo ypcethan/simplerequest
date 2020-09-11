@@ -56,15 +56,16 @@ def test_post_json__http_error(mocker, expecetd_error_code):
     # have status_code attribute.
     assert sys.last_value.status_code == expecetd_error_code
 
-#
+
 # def test_post_json_ConnectionError(mocker):
 #     mocker.patch('http.client.HTTPConnection.getresponse',
 #                  side_effect=ConnectionError())
 #     with pytest.raises(ConnectionError) as error:
 #         conn = http.client.HTTPSConnection('host')
 #         response = conn.getresponse()
-#     assert error.value.message == "HTTP Status Code: %s" % str(
-#         expecetd_error_code)
-#     assert sys.last_value.status_code == expecetd_error_code
 
-# Test handling ValueError and JSONDecodeError correctly
+# def test_post_json_ConnectionError(mocker):
+#     mocker.patch('http.client.HTTPConnection.getresponse',
+#                  side_effect=ConnectionError())
+#     with pytest.raises(ConnectionError) as error:
+#         get_json('dummy_url')
