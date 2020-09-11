@@ -5,11 +5,9 @@ python:
 - '3.7'
 - '3.8'
 install:
-- pip install pipenv
-- pipenv install --dev
-- pip install .
+- make setup 
 script:
-- pytest
+- make test-all
 deploy:
   distributions: sdist bdist_wheel
   skip_existing: true
