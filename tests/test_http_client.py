@@ -1,7 +1,6 @@
 # coding=utf-8
 from __future__ import unicode_literals
 import sys
-import json
 import pytest
 from simplehttp.http_client import get_json, post_json
 from simplehttp.error import HttpError
@@ -33,22 +32,37 @@ def test_post_json(mocker, expected_response):
 
 
 @pytest.mark.parametrize('expecetd_error_code', [400, 404, 500])
-def test_get_json_HttpError(mocker, expecetd_error_code):
+def test_get_json__http_error(mocker, expecetd_error_code):
     mocker.patch('simplehttp.http_client.http_get',
                  side_effect=HttpError(expecetd_error_code))
     with pytest.raises(HttpError) as error:
-        response = get_json('dummy_url')
+        get_json('dummy_url')
     assert error.value.message == "HTTP Status Code: %s" % str(
         expecetd_error_code)
+    # If HttpError were raised, sys.last_value should
+    # have status_code attribute.
     assert sys.last_value.status_code == expecetd_error_code
 
 
 @pytest.mark.parametrize('expecetd_error_code', [400, 404, 500])
-def test_post_json_HttpError(mocker, expecetd_error_code):
+def test_post_json__http_error(mocker, expecetd_error_code):
     mocker.patch('simplehttp.http_client.http_post',
                  side_effect=HttpError(expecetd_error_code))
     with pytest.raises(HttpError) as error:
-        response = post_json('dummy_url')
+        post_json('dummy_url')
     assert error.value.message == "HTTP Status Code: %s" % str(
         expecetd_error_code)
+    # If HttpError were raised, sys.last_value should
+    # have status_code attribute.
     assert sys.last_value.status_code == expecetd_error_code
+
+#
+# def test_post_json_ConnectionError(mocker):
+#     mocker.patch('http.client.HTTPConnection.getresponse',
+#                  side_effect=ConnectionError())
+#     with pytest.raises(ConnectionError) as error:
+#         conn = http.client.HTTPSConnection('host')
+#         response = conn.getresponse()
+#     assert error.value.message == "HTTP Status Code: %s" % str(
+#         expecetd_error_code)
+#     assert sys.last_value.status_code == expecetd_error_code

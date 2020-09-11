@@ -12,6 +12,12 @@ def get_json(url, params=None):
         params (dict, optional):Addtional parameters
             to  be added to the query string.
 
+    Raises:
+        UnexpectedHttpError: Get raised when one of the following is raised.
+            1.ConnectionError from http.client.HTTPConnection.getresponse().
+            2.urllib2.URLError from urllib2.urlopen().
+            3.urllib2.HTTPError from urllib2.urlopen().
+
     Returns:
         [dict]: Reponse body in JSON (Python dictionary) format
     """
@@ -21,7 +27,7 @@ def get_json(url, params=None):
 
         response = http_get(url, params)
 
-    except Exception as error:
+    except UnexpectedHttpError as error:
         sys.last_value = error
         # re-raise the exception (allow the caller to handle)
         raise
@@ -46,7 +52,7 @@ def post_json(url, params=None, data=None):
     try:
         # response = make_request('POST', url, params, data)
         response = http_post(url, params, data)
-    except Exception as error:
+    except UnexpectedHttpError as error:
         sys.last_value = error
         raise
     return response
