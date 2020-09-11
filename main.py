@@ -39,9 +39,12 @@ def noneValidJson():
 
 def connectionError():
     # url_target = "dummy"
-    url_target = "https://httpbin.org"
+    url_target = "hs://httpbin.org"
     pdb.set_trace()
-    r = simplehttp.get_json(url_target)
+    try:
+        r = simplehttp.get_json(url_target)
+    except Exception as err:
+        print(err)
 
 
 if __name__ == '__main__':
