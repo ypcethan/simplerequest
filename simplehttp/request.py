@@ -1,6 +1,6 @@
 import sys
 import json
-from simplehttp.error import HttpError
+from simplehttp.error import HttpError, InvalidUrlError
 from simplehttp.utils import process_url
 
 try:
@@ -27,6 +27,7 @@ def http_get(url, params=None):
     """
     params = params or {}
     url_parts = process_url(url, params)
+
     if sys.version_info[0] > 2:
         if url_parts['host'] == 'http':
             conn = http.client.HTTPConnection(url_parts['host'])
@@ -71,6 +72,8 @@ def http_post(url, params={}, data={}):
     params = params or {}
     data = data or {}
     url_parts = process_url(url, params)
+    if not url_parts['host'] or not url_parts['protocal']:
+        raise InvalidUrlError(url)
     headers = {'Content-Type': 'application/json'}
     data_str = json.dumps(data)
     if sys.version_info[0] > 2:

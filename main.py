@@ -38,10 +38,13 @@ def noneValidJson():
 
 
 def connectionError():
-    url_target = "https://google.com/sawer"
+    # url_target = "dummy"
+    url_target = "https://httpbin.org"
+    pdb.set_trace()
     r = simplehttp.get_json(url_target)
 
 
 if __name__ == '__main__':
     # noneValidJson()
-    errorCode()
+    # errorCode()
+    connectionError()

@@ -1,5 +1,6 @@
 # encoding=utf-8
 from __future__ import unicode_literals
+from simplehttp.error import InvalidUrlError
 try:
     from urllib.parse import urlparse, urlencode
 except ImportError:
@@ -31,6 +32,11 @@ def process_url(url, params=None):
         resources_path += "?" + query
     if params:
         resources_path = merge_path_with_params(resources_path, params)
+
+    if not host or not protocal:
+        raise InvalidUrlError(url)
+    if not protocal in ['http', 'https']:
+        raise InvalidUrlError(url)
     return {'host': host, 'path': resources_path, 'protocal': protocal}
 
 

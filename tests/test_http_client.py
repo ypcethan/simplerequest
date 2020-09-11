@@ -57,15 +57,7 @@ def test_post_json__http_error(mocker, expecetd_error_code):
     assert sys.last_value.status_code == expecetd_error_code
 
 
-# def test_post_json_ConnectionError(mocker):
-#     mocker.patch('http.client.HTTPConnection.getresponse',
-#                  side_effect=ConnectionError())
-#     with pytest.raises(ConnectionError) as error:
-#         conn = http.client.HTTPSConnection('host')
-#         response = conn.getresponse()
-
-# def test_post_json_ConnectionError(mocker):
-#     mocker.patch('http.client.HTTPConnection.getresponse',
-#                  side_effect=ConnectionError())
-#     with pytest.raises(ConnectionError) as error:
-#         get_json('dummy_url')
+def test_post_json_ConnectionError(mocker):
+    with pytest.raises(Exception) as error:
+        get_json('dummy_url')
+    assert error.value.message == 'Some unexpected errors have occured'
