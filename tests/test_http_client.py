@@ -66,3 +66,5 @@ def test_post_json__http_error(mocker, expecetd_error_code):
 #     assert error.value.message == "HTTP Status Code: %s" % str(
 #         expecetd_error_code)
 #     assert sys.last_value.status_code == expecetd_error_code
+
+# Test handling ValueError and JSONDecodeError correctly

@@ -59,7 +59,8 @@ def http_get(url, params=None):
 
     try:
         data_json = json.loads(data)
-    except (ValueError, JSONDecodeError):
+    # JSONDecodeError is a subclass of ValueError
+    except ValueError:
         data_json = {}
 
     return data_json
@@ -102,7 +103,7 @@ def http_post(url, params={}, data={}):
 
     try:
         data_json = json.loads(data)
-    except (ValueError, JSONDecodeError):
+    except ValueError:
         data_json = {}
 
     return data_json

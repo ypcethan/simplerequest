@@ -27,7 +27,7 @@ def get_json(url, params=None):
 
         response = http_get(url, params)
 
-    except UnexpectedHttpError as error:
+    except Exception as error:
         sys.last_value = error
         # re-raise the exception (allow the caller to handle)
         raise
@@ -52,7 +52,7 @@ def post_json(url, params=None, data=None):
     try:
         # response = make_request('POST', url, params, data)
         response = http_post(url, params, data)
-    except UnexpectedHttpError as error:
+    except Exception as error:
         sys.last_value = error
         raise
     return response

@@ -1,6 +1,5 @@
 # coding=utf-8
 from __future__ import unicode_literals
-import sys
 import json
 import pytest
 from simplehttp.request import http_get, http_post
@@ -43,9 +42,9 @@ def test_http_post(url, params, data, expected_args, expected_data):
     ('https://httpbin.org/status/500',  500),
 ])
 def test_http_get_error_code(url,  error_code):
-    with pytest.raises(HttpError) as e:
-        response = http_get(url)
-    assert e.value.message == "HTTP Status Code: %s" % str(error_code)
+    with pytest.raises(HttpError) as error:
+        http_get(url)
+    assert error.value.message == "HTTP Status Code: %s" % str(error_code)
     # assert sys.last_value.status_code == error_code
 
 
@@ -54,7 +53,21 @@ def test_http_get_error_code(url,  error_code):
     ('https://httpbin.org/status/500',  500),
 ])
 def test_http_post_error_code(url,  error_code):
-    with pytest.raises(HttpError) as e:
-        response = http_post(url)
-    assert e.value.message == "HTTP Status Code: %s" % str(error_code)
+    with pytest.raises(HttpError) as error:
+        http_post(url)
+    assert error.value.message == "HTTP Status Code: %s" % str(error_code)
     # assert sys.last_value.status_code == error_code
+
+
+def test_http_get_handle_wrong_json_format(mocker):
+    mocker.patch("simplehttp.request.json.loads",
+                 side_effect=ValueError())
+    response = http_get('https://httpbin.org/get')
+    assert response == {}
+
+
+def test_http_post_handle_wrong_json_format(mocker):
+    mocker.patch("simplehttp.request.json.loads",
+                 side_effect=ValueError())
+    response = http_post('https://httpbin.org/post')
+    assert response == {}
